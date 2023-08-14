@@ -10,10 +10,14 @@ import Foundation
 extension String {
    
    /**
-      String.Index type seems to be incompatible with Int, UInt, ...
+    subString using offset 0 for from. from = n => from n+1 th character,
+      using offset 1 for to. to = n => n th character is included.
     Using the Java substring approach from
     https://stackoverflow.com/questions/45562662/how-can-i-use-string-substring-in-swift-4-substringto-is-deprecated-pleas
-     expanded by optional to
+    expanded by to as optional.
+    Motivation for this function:
+    String.Index type seems to be incompatible with Int, UInt, ...
+    This makes it difficuilt to use the slicing parameters with integer parameters.
     */
    func subString(from: Int, to: Int? = nil) -> String {
       let startIndex = self.index(self.startIndex, offsetBy: from)
