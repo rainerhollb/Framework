@@ -78,14 +78,10 @@ struct Time : Describable {
          caller: caller)
       Log.timed (caller! + "waitUntilNextFullSecond is waiting \(NANOS_TO_WAIT) ns = \(Double(NANOS_TO_WAIT) / Time.NANOS_PER_SECOND) s", typeName)
       if expectedMaximumNanos != nil && NANOS_TO_WAIT > expectedMaximumNanos! {
-         Log.timed("**********************************", typeName)
-         Log.timed(caller! + "NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) > expectedMaximumNanoseconds = \(expectedMaximumNanos!)", typeName)
-         Log.timed("**********************************", typeName)
+         Log.timedError(caller! + "NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) > expectedMaximumNanoseconds = \(expectedMaximumNanos!)", typeName)
       }
       if expectedMinimumNanos != nil && NANOS_TO_WAIT < expectedMinimumNanos! {
-         Log.timed("**********************************", typeName)
-         Log.timed(caller! + "NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) < expectedMinimumNanos = \(expectedMinimumNanos!)", typeName)
-         Log.timed("**********************************", typeName)
+         Log.timedError(caller! + "NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) < expectedMinimumNanos = \(expectedMinimumNanos!)", typeName)
       }
       try await Task.sleep(nanoseconds: NANOS_TO_WAIT)
    }

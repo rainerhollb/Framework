@@ -61,6 +61,8 @@ struct Log {
    
    //let DEFAULT_LOG = Logger()
    
+   
+   
    /**
     To use origin, add Desribable protocol to the using struct and use Self.typeName as 2nd argument in this call.
     In static code, Self can be omitted.
@@ -74,4 +76,9 @@ struct Log {
       //DEFAULT_LOG.info(origin! + blank + ": " + text)
    }
    
+   static func timedError(_ errortext: String, _ origin: String? = ""){
+      print("************************** ERROR ************************************")
+      Log.timed(errortext, origin)
+      print("*********************************************************************")
+   }
 }
