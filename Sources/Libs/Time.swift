@@ -63,27 +63,40 @@ struct Time : Describable {
    
    static let ONE_SECOND : TimeInterval = 1.0
    
+   static func wait(_ nanos: UInt64, _ callerDescripton: String = "") async {
+      do {
+         try await Task.sleep(nanoseconds: nanos)
+      } catch let ERROR {
+         Log.timed(ERROR.localizedDescription + " " + callerDescripton, Self.typeName)
+      }
+   }
+
    static func waitUntilNextFullSecond(
       additional: TimeInterval? = 0.0,
       expectedMaximumNanos: UInt64? = nil,
       expectedMinimumNanos: UInt64? = nil,
-      caller: String? = ""
-   ) async throws {
+      caller: String = ""
+   ) async {
       let NOW = now()
-      let NANOS_TO_WAIT = nanosecondsTo(
-         date1: NOW,
-         date2: try Time.fullSecondDate(NOW, caller)
-            .addingTimeInterval(ONE_SECOND)
-            .addingTimeInterval(additional!),
-         caller: caller)
-      Log.timed (caller! + "waitUntilNextFullSecond is waiting \(NANOS_TO_WAIT) ns = \(Double(NANOS_TO_WAIT) / Time.NANOS_PER_SECOND) s", typeName)
-      if expectedMaximumNanos != nil && NANOS_TO_WAIT > expectedMaximumNanos! {
-         Log.timedError(caller! + "NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) > expectedMaximumNanoseconds = \(expectedMaximumNanos!)", typeName)
+      do {
+         let NANOS_TO_WAIT = nanosecondsTo(
+            date1: NOW,
+            date2: try Time.fullSecondDate(NOW, caller)
+               .addingTimeInterval(ONE_SECOND)
+               .addingTimeInterval(additional!),
+            caller: caller)
+         Log.timed(caller + " Time.waitUntilNextFullSecond is waiting \(NANOS_TO_WAIT) ns = \(Double(NANOS_TO_WAIT) / Time.NANOS_PER_SECOND) s", typeName)
+         if expectedMaximumNanos != nil && NANOS_TO_WAIT > expectedMaximumNanos! {
+            Log.timedError("Time.NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) > expectedMaximumNanoseconds = \(expectedMaximumNanos!)", typeName)
+         }
+         if expectedMinimumNanos != nil && NANOS_TO_WAIT < expectedMinimumNanos! {
+            Log.timedError(
+               "Time.NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) < expectedMinimumNanos = \(expectedMinimumNanos!)", typeName)
+         }
+         await wait(NANOS_TO_WAIT, caller)
+      } catch let ERROR {
+         Log.timed(ERROR.localizedDescription + " " + caller, Self.typeName)
       }
-      if expectedMinimumNanos != nil && NANOS_TO_WAIT < expectedMinimumNanos! {
-         Log.timedError(caller! + "NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) < expectedMinimumNanos = \(expectedMinimumNanos!)", typeName)
-      }
-      try await Task.sleep(nanoseconds: NANOS_TO_WAIT)
    }
    
 }
