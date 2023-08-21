@@ -63,6 +63,14 @@ struct Time : Describable {
    
    static let ONE_SECOND : TimeInterval = 1.0
    
+   static func wait(_ nanos: UInt64, _ callerDescripton: String = "") async {
+      do {
+         try await Task.sleep(nanoseconds: nanos)
+      } catch let ERROR {
+         Log.timed(ERROR.localizedDescription + " " + callerDescripton, Self.typeName)
+      }
+   }
+
    static func waitUntilNextFullSecond(
       additional: TimeInterval? = 0.0,
       expectedMaximumNanos: UInt64? = nil,
