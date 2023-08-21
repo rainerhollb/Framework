@@ -30,6 +30,10 @@ extension String {
       return String(self[startIndex..<endIndex])
    }
 
+   func subString(_ from: Int, _ to: Int? = nil) -> String {
+      return subString(from: from, to: to)
+   }
+
    func wrapHardly(charsPerLine: Int) -> String {
       if self.count <= charsPerLine {
          return self
