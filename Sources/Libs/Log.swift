@@ -67,16 +67,20 @@ struct Log {
     To use origin, add Desribable protocol to the using struct and use Self.typeName as 2nd argument in this call.
     In static code, Self can be omitted.
     */
-   static func timed(_ text: String, _ origin: String? = ""){
-      var blank = ""
-      if origin! != "" {
-         blank += " "
-      }
-      print(Time.timeString(Time.now(),Time.FORMAT_HH_MM_SS_MILLIS) + " " + origin! + blank + ": " + text)
+   static func timed(_ text: String, _ origin: String = ""){
+      print(logFormatted(text: text, origin: origin))
       //DEFAULT_LOG.info(origin! + blank + ": " + text)
    }
    
-   static func timedError(_ errortext: String, _ origin: String? = ""){
+   static func logFormatted(text: String, origin: String) -> String {
+      var blank = ""
+      if origin != "" {
+         blank += " "
+      }
+      return Time.timeString(Time.now(),Time.FORMAT_HH_MM_SS_MILLIS) + " " + origin + blank + ": " + text
+   }
+   
+   static func timedError(_ errortext: String, _ origin: String = ""){
       print("************************** ERROR ************************************")
       Log.timed(errortext, origin)
       print("*********************************************************************")
