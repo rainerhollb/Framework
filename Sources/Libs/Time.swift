@@ -76,7 +76,7 @@ struct Time : Describable {
       expectedMaximumNanos: UInt64? = nil,
       expectedMinimumNanos: UInt64? = nil,
       caller: String = "",
-      log: Log
+      log: Log? = nil
    ) async {
       let NOW = now()
       do {
@@ -86,17 +86,36 @@ struct Time : Describable {
                .addingTimeInterval(ONE_SECOND)
                .addingTimeInterval(additional!),
             caller: caller)
-         log.timed(caller + " Time.waitUntilNextFullSecond is waiting \(NANOS_TO_WAIT) ns = \(Double(NANOS_TO_WAIT) / Time.NANOS_PER_SECOND) s", typeName)
-         if expectedMaximumNanos != nil && NANOS_TO_WAIT > expectedMaximumNanos! {
-            log.timedError("Time.NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) > expectedMaximumNanoseconds = \(expectedMaximumNanos!)", typeName)
+         let TEXT : String = caller + " Time.waitUntilNextFullSecond is waiting \(NANOS_TO_WAIT) ns = \(Double(NANOS_TO_WAIT) / Time.NANOS_PER_SECOND) s"
+         if log == nil {
+            Log.timed(TEXT, typeName)
+         } else {
+            log!.timed(TEXT, typeName)
          }
+         if expectedMaximumNanos != nil && NANOS_TO_WAIT > expectedMaximumNanos! {
+            let TEXT1 = "Time.NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) > expectedMaximumNanoseconds = \(expectedMaximumNanos!)"
+            if log == nil {
+               Log.timedError(TEXT1, typeName)
+            } else {
+               log!.timedError(TEXT1, typeName)
+            }
+         }
+         
          if expectedMinimumNanos != nil && NANOS_TO_WAIT < expectedMinimumNanos! {
-            log.timedError(
-               "Time.NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) < expectedMinimumNanos = \(expectedMinimumNanos!)", typeName)
+            let TEXT2 = "Time.NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) < expectedMinimumNanos = \(expectedMinimumNanos!)"
+            if log == nil {
+               Log.timedError(TEXT2, typeName)
+            } else {
+               log!.timedError(TEXT2, typeName)
+            }
          }
          await wait(NANOS_TO_WAIT, caller)
       } catch let ERROR {
-         log.timed(ERROR.localizedDescription + " " + caller, Self.typeName)
+         if log == nil {
+            Log.timed(ERROR.localizedDescription + " " + caller, Self.typeName)
+         } else {
+            log!.timed(ERROR.localizedDescription + " " + caller, Self.typeName)
+         }
       }
    }
    
