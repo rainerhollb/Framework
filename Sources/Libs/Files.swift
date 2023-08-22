@@ -13,18 +13,20 @@ struct Files : Describable {
    /**
     Returns the apps sandbox path, without trailing /.
     Prints alternatives to the used method.
+    
+    PRE: info.plist contains Support Document Browser = YES to be able to access the files via app Files + a reader or EasyEditText
     */
-   static func appSandbox() -> String {
+   static func appSandbox() -> URL? {
       // alternative, needs to be tested:
       testHomeAlternatives()
       
       do {
          let FILE_URL = try FileManager.default.url(
             for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-         return FILE_URL.path
+         return FILE_URL
       } catch let ERROR {
          print(ERROR.localizedDescription)
-         return ""
+         return nil
       }
    }
    

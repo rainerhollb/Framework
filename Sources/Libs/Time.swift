@@ -75,7 +75,8 @@ struct Time : Describable {
       additional: TimeInterval? = 0.0,
       expectedMaximumNanos: UInt64? = nil,
       expectedMinimumNanos: UInt64? = nil,
-      caller: String = ""
+      caller: String = "",
+      log: Log
    ) async {
       let NOW = now()
       do {
@@ -85,17 +86,17 @@ struct Time : Describable {
                .addingTimeInterval(ONE_SECOND)
                .addingTimeInterval(additional!),
             caller: caller)
-         Log.timed(caller + " Time.waitUntilNextFullSecond is waiting \(NANOS_TO_WAIT) ns = \(Double(NANOS_TO_WAIT) / Time.NANOS_PER_SECOND) s", typeName)
+         log.timed(caller + " Time.waitUntilNextFullSecond is waiting \(NANOS_TO_WAIT) ns = \(Double(NANOS_TO_WAIT) / Time.NANOS_PER_SECOND) s", typeName)
          if expectedMaximumNanos != nil && NANOS_TO_WAIT > expectedMaximumNanos! {
-            Log.timedError("Time.NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) > expectedMaximumNanoseconds = \(expectedMaximumNanos!)", typeName)
+            log.timedError("Time.NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) > expectedMaximumNanoseconds = \(expectedMaximumNanos!)", typeName)
          }
          if expectedMinimumNanos != nil && NANOS_TO_WAIT < expectedMinimumNanos! {
-            Log.timedError(
+            log.timedError(
                "Time.NANOSECONDS_TO_WAIT = \(NANOS_TO_WAIT) < expectedMinimumNanos = \(expectedMinimumNanos!)", typeName)
          }
          await wait(NANOS_TO_WAIT, caller)
       } catch let ERROR {
-         Log.timed(ERROR.localizedDescription + " " + caller, Self.typeName)
+         log.timed(ERROR.localizedDescription + " " + caller, Self.typeName)
       }
    }
    
