@@ -69,32 +69,38 @@ class Log : Describable {
    var fileIndex : Int = 0
    var lineIndex : Int = 0
    
+   var errorLog : Log? = nil
+   
    /**
     path without file index and without extension
     */
    var filename : String? = nil
    
    /**
-    filename without path and without extension
-    complete path: <path to app documents> + filename + fileindex + ".log"
+    filename without path and without extension. If not set, only logging to console is possible.
+    complete path will be: <path to app documents> + filename + fileindex + ".txt"
     */
-   init(_ logToConsole: Bool = true, _ filename: String? = nil) {
+   init(_ logToConsole: Bool = true, _ filename: String? = nil, isErrorLog : Bool = false) {
       self.logToConsole = logToConsole
       self.filename = filename
+      if filename != nil && !isErrorLog {
+         errorLog = Log(false, filename! + "Error", isErrorLog: true)
+      }
    }
    
    
    func timed(_ text: String, _ origin: String = "") {
       let FORMATTED_TEXT = Log.logFormatted(text: text, origin: origin)
-      
       log(FORMATTED_TEXT)
    }
    
    
    func timedError(_ errortext: String, _ origin: String = ""){
       log("************************** ERROR ************************************")
-      timed(errortext, origin)
+      let FORMATTED_TEXT = Log.logFormatted(text: errortext, origin: origin)
+      log(FORMATTED_TEXT)
       log("*********************************************************************")
+      errorLog?.log(FORMATTED_TEXT)
    }
    
    
@@ -106,7 +112,7 @@ class Log : Describable {
          return nil
       }
 
-      return Log.APP_SANDBOX!.path + "/" + filename! + String(fileIndex) + ".log"
+      return Log.APP_SANDBOX!.path + "/" + filename! + String(fileIndex) + ".txt"
    }
 
    fileprivate func fileURL() -> URL? {
@@ -117,11 +123,12 @@ class Log : Describable {
          return nil
       }
       
-      return Log.APP_SANDBOX!.appendingPathComponent(filename! + String(fileIndex) + ".log", conformingTo: .fileURL)
+      return Log.APP_SANDBOX!.appendingPathComponent(filename! + String(fileIndex) + ".txt", conformingTo: .fileURL)
    }
 
    let LOG_GROUP = DispatchGroup()
-   
+   var fileUpdater : FileHandle?
+
    fileprivate func log(_ FORMATTED_TEXT: String) {
       if logToConsole {
          print(FORMATTED_TEXT)
@@ -131,7 +138,10 @@ class Log : Describable {
       
       if filePath() != nil {
          if lineIndex == 0 {
-            /* new file, delete old seems not to be necessary due to String.write deleting previous content
+            
+            // new file, delete old seems not to be necessary due to String.write deleting previous content
+            // but maybe this is not reliable
+            /*
             if FileManager.default.fileExists(atPath: filePath()!) {
                do {
                   try FileManager.default.removeItem(atPath: filePath()!)
@@ -140,34 +150,39 @@ class Log : Describable {
                }
             }
              */
-
-            do {
-               try (String(fileIndex) + " " + String(lineIndex) + " " + FORMATTED_TEXT).write(toFile: filePath()!, atomically: true, encoding: .utf8)
-            } catch let ERROR {
-               logFileErrorAndStopWriting(ERROR.localizedDescription)
+            
+            // write FORMATTED_TEXT to file's first line:
+            if filePath() != nil { // may have been set nil in previous logFileErrorAndStopWriting
+               do {
+                  try (String(fileIndex) + " " + String(lineIndex) + " " + FORMATTED_TEXT).write(toFile: filePath()!, atomically: true, encoding: .utf8)
+               } catch let ERROR {
+                  logFileErrorAndStopWriting(ERROR.localizedDescription)
+               }
+               if fileURL() != nil {
+                  do {
+                     fileUpdater = try FileHandle(forUpdating: fileURL()!)
+                  } catch let ERROR {
+                     logFileErrorAndStopWriting(ERROR.localizedDescription)
+                  }
+               }
             }
          } else {
-            if fileURL() != nil {
-               if let fileUpdater = try? FileHandle(forUpdating: fileURL()!) {
+            if fileUpdater != nil {
                   
-                  // Function which when called will cause all updates to start from end of the file
-                  fileUpdater.seekToEndOfFile()
-                  
-                  // Which lets the caller move editing to any position within the file by supplying an offset
-                  fileUpdater.write(("\n" + String(fileIndex) + " " + String(lineIndex) + " " + FORMATTED_TEXT).data(using: .utf8)!)
-                  
-                  // Once we convert our new content to data and write it, we close the file and that’s it!
-                  fileUpdater.closeFile()
-               } else {
-                  logFileErrorAndStopWriting("File handle not found")
-               }
+               // Function which when called will cause all updates to start from end of the file
+               fileUpdater!.seekToEndOfFile()
+               
+               // Which lets the caller move editing to any position within the file by supplying an offset
+               fileUpdater!.write(("\n" + String(fileIndex) + " " + String(lineIndex) + " " + FORMATTED_TEXT).data(using: .utf8)!)
+               
             } else {
-               logFileErrorAndStopWriting("File URL not set")
+               logFileErrorAndStopWriting("File handle not found")
             }
          }
             
          lineIndex += 1
          if lineIndex >= Log.MAX_LOG_LINES {
+            fileUpdater?.closeFile()
             fileIndex += 1
             lineIndex = 0
             if fileIndex >= Log.MAX_LOG_FILES {
@@ -182,6 +197,7 @@ class Log : Describable {
    fileprivate func logFileErrorAndStopWriting(_ error: String) {
       Log.timedError(error + "\nDeactivating file logging.")
       filename = nil
+      fileUpdater = nil
    }
    
    /**
