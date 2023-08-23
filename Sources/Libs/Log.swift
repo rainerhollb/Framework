@@ -154,13 +154,13 @@ class Log : Describable {
              */
             
             // write TEXT to file's first line:
-            if fileURL() != nil { // may have been set nil in previous logFileErrorAndStopWriting
+            if fileURL() != nil { // may have been set nil in previous logFileErrorAndStopWriting since last check
                do {
                   try TEXT.write(to: fileURL()!, atomically: true, encoding: .utf8)
                } catch let ERROR {
                   logFileErrorAndStopWriting(ERROR.localizedDescription)
                }
-               if fileURL() != nil {
+               if fileURL() != nil { // may have been set nil in previous logFileErrorAndStopWriting since last check
                   do {
                      fileUpdater = try FileHandle(forUpdating: fileURL()!)
                   } catch let ERROR {
@@ -177,8 +177,6 @@ class Log : Describable {
                // Which lets the caller move editing to any position within the file by supplying an offset
                fileUpdater!.write(("\n" + TEXT).data(using: .utf8)!)
                
-            } else {
-               logFileErrorAndStopWriting("File handle not found")
             }
          }
             
