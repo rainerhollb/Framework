@@ -135,13 +135,15 @@ class Log : Describable {
          print(FORMATTED_TEXT)
       }
       
-      LOG_GROUP.enter()
+      LOG_GROUP.enter() // avoids confusion in line numbering and file switching
       
       if fileURL() != nil {
          let TEXT: String = String(fileIndex) + " " + String(lineIndex) + " " + FORMATTED_TEXT
          if lineIndex == 0 {
             
-            // New file, delete old seems not to be necessary due to String.write deleting previous content.
+            // New or overwriting file
+            
+            // Deleting old seems not necessary due to String.write deleting previous content.
             // The delete is buggy.
             /*
             if FileManager.default.fileExists(atPath: filePath()!) {
@@ -169,6 +171,9 @@ class Log : Describable {
                }
             }
          } else {
+            
+            // Next line in existing file
+            
             if fileUpdater != nil {
                   
                // Function which when called will cause all updates to start from end of the file
