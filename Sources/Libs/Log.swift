@@ -103,7 +103,7 @@ class Log : Describable {
       errorLog?.log(FORMATTED_TEXT)
    }
    
-   
+   /*
    fileprivate func filePath() -> String? {
       if filename == nil {
          return nil
@@ -114,6 +114,7 @@ class Log : Describable {
 
       return Log.APP_SANDBOX!.path + "/" + filename! + String(fileIndex) + ".txt"
    }
+    */
 
    fileprivate func fileURL() -> URL? {
       if filename == nil {
@@ -136,11 +137,11 @@ class Log : Describable {
       
       LOG_GROUP.enter()
       
-      if filePath() != nil {
+      if fileURL() != nil {
          if lineIndex == 0 {
             
-            // new file, delete old seems not to be necessary due to String.write deleting previous content
-            // but maybe this is not reliable
+            // New file, delete old seems not to be necessary due to String.write deleting previous content.
+            // The delete is buggy.
             /*
             if FileManager.default.fileExists(atPath: filePath()!) {
                do {
@@ -152,9 +153,10 @@ class Log : Describable {
              */
             
             // write FORMATTED_TEXT to file's first line:
-            if filePath() != nil { // may have been set nil in previous logFileErrorAndStopWriting
+            let TEXT: String = String(fileIndex) + " " + String(lineIndex) + " " + FORMATTED_TEXT
+            if fileURL() != nil { // may have been set nil in previous logFileErrorAndStopWriting
                do {
-                  try (String(fileIndex) + " " + String(lineIndex) + " " + FORMATTED_TEXT).write(toFile: filePath()!, atomically: true, encoding: .utf8)
+                  try TEXT.write(to: fileURL()!, atomically: true, encoding: .utf8)
                } catch let ERROR {
                   logFileErrorAndStopWriting(ERROR.localizedDescription)
                }
@@ -173,7 +175,7 @@ class Log : Describable {
                fileUpdater!.seekToEndOfFile()
                
                // Which lets the caller move editing to any position within the file by supplying an offset
-               fileUpdater!.write(("\n" + String(fileIndex) + " " + String(lineIndex) + " " + FORMATTED_TEXT).data(using: .utf8)!)
+               fileUpdater!.write(("\n" + TEXT).data(using: .utf8)!)
                
             } else {
                logFileErrorAndStopWriting("File handle not found")
