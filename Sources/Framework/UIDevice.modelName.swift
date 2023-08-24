@@ -239,6 +239,37 @@ public extension UIDevice {
       }
    }
    
+   static var smallScreen : Bool {
+      switch modelIdentifier() {
+      case "iPhone1,1": return true
+      case "iPhone1,2": return true
+      case "iPhone2,1": return true
+      case "iPhone3,1": return true
+      case "iPhone3,2": return true
+      case "iPhone3,3": return true
+      case "iPhone4,1": return true
+      case "iPhone5,1": return true
+      case "iPhone5,2": return true
+      case "iPhone5,3": return true
+      case "iPhone5,4": return true
+      case "iPhone6,1": return true
+      case "iPhone6,2": return true
+      case "iPhone7,1": return true
+      case "iPhone7,2": return true
+      case "iPhone8,1": return true
+         //case "iPhone8,2": return "iPhone 6s Plus"
+      case "iPhone8,4": return true
+      case "iPhone9,1": return true
+         //case "iPhone9,2": return "iPhone 7 Plus"
+      case "iPhone9,3": return true
+         //case "iPhone9,4": return "iPhone 7 Plus"
+      case "iPhone10,1": return true
+         //case "iPhone10,2": return "iPhone 8 Plus"
+         //case "iPhone10,3": return "iPhone X Global"
+      case "iPhone10,4": return true
+      default: return false
+      }
+   }
    
    // https://levelup.gitconnected.com/device-information-in-swift-eef45be38109
    func getDeviceCode() -> String? {
