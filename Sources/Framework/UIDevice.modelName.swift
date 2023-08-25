@@ -22,7 +22,8 @@ public extension UIDevice {
    //       print("Wow! Running on a \(UIDevice().modelName)")
    //    }
    
-   static func modelIdentifier() -> String {
+
+   static var modelIdentifier : String {
       var systemInfo = utsname()
       uname(&systemInfo)
       let machineMirror = Mirror(reflecting: systemInfo.machine)
@@ -33,15 +34,22 @@ public extension UIDevice {
       return identifier
    }
    
+   static var isSimulator = false
+      
    // https://stackoverflow.com/questions/26028918/how-to-determine-the-current-iphone-device-model
    // Jan 2023, but Swift 3
    static var modelName: String {
-      let IDENTIFIER = modelIdentifier()
-      switch IDENTIFIER {
+      switch modelIdentifier {
             // MARK: - iPhone
-         case "i386": return "iPhone Simulator"
-         case "x86_64": return "iPhone Simulator"
-         case "arm64": return "iPhone Simulator"
+         case "i386":
+            isSimulator = true
+            return "iPhone Simulator"
+         case "x86_64":
+            isSimulator = true
+            return "iPhone Simulator"
+         case "arm64":
+            isSimulator = true
+            return "iPhone Simulator"
          case "iPhone1,1": return "iPhone"
          case "iPhone1,2": return "iPhone 3G"
          case "iPhone2,1": return "iPhone 3GS"
@@ -235,12 +243,12 @@ public extension UIDevice {
          case "AudioAccessory5,1": return "HomePod mini"
             
             // MARK: - Unrecognized
-         default: return IDENTIFIER
+         default: return modelIdentifier
       }
    }
    
-   static var smallScreen : Bool {
-      switch modelIdentifier() {
+   static var hasSmallScreen : Bool {
+      switch modelIdentifier {
       case "iPhone1,1": return true
       case "iPhone1,2": return true
       case "iPhone2,1": return true
@@ -267,7 +275,13 @@ public extension UIDevice {
          //case "iPhone10,2": return "iPhone 8 Plus"
          //case "iPhone10,3": return "iPhone X Global"
       case "iPhone10,4": return true
-      default: return false
+      default:
+         switch UIDevice.current.name {
+            case "iPhone 8":
+               isSimulator = true
+               return true // simulator
+            default: return false
+         }
       }
    }
    
