@@ -81,6 +81,7 @@ class Log : Describable {
    init(_ logToConsole: Bool = true, _ filename: String? = nil, isErrorLog : Bool = false) {
       self.logToConsole = logToConsole
       if !UIDevice.isSimulator {
+         print("This device is categorized as no simulator. Logs are created.");
          self.filename = filename
          if filename != nil && !isErrorLog {
             errorLog = Log(false, filename! + "Error", isErrorLog: true)

@@ -48,7 +48,9 @@ public extension UIDevice {
    }
    
 
-   static var isSimulator = false
+   static var isSimulator : Bool {
+      return modelName == "iPhone Simulator"
+   }
       
    // https://stackoverflow.com/questions/26028918/how-to-determine-the-current-iphone-device-model
    // Jan 2023, but Swift 3
@@ -56,13 +58,10 @@ public extension UIDevice {
       switch modelIdentifier {
             // MARK: - iPhone
          case "i386":
-            isSimulator = true
             return "iPhone Simulator"
          case "x86_64":
-            isSimulator = true
             return "iPhone Simulator"
          case "arm64":
-            isSimulator = true
             return "iPhone Simulator"
          case "iPhone1,1": return "iPhone"
          case "iPhone1,2": return "iPhone 3G"
@@ -292,7 +291,6 @@ public extension UIDevice {
       default:
          switch UIDevice.current.name {
             case "iPhone 8":
-               isSimulator = true
                return true // simulator
             default: return false
          }
