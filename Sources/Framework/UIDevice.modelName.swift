@@ -34,6 +34,20 @@ public extension UIDevice {
       return identifier
    }
    
+   // https://levelup.gitconnected.com/device-information-in-swift-eef45be38109
+   // same result as modelIdentifier
+   static var deviceCode: String? {
+      var systemInfo = utsname()
+      uname(&systemInfo)
+      let modelCode = withUnsafePointer(to: &systemInfo.machine) {
+         $0.withMemoryRebound(to: CChar.self, capacity: 1) {
+            ptr in String.init(validatingUTF8: ptr)
+         }
+      }
+      return modelCode
+   }
+   
+
    static var isSimulator = false
       
    // https://stackoverflow.com/questions/26028918/how-to-determine-the-current-iphone-device-model
@@ -283,18 +297,6 @@ public extension UIDevice {
             default: return false
          }
       }
-   }
-   
-   // https://levelup.gitconnected.com/device-information-in-swift-eef45be38109
-   func getDeviceCode() -> String? {
-      var systemInfo = utsname()
-      uname(&systemInfo)
-      let modelCode = withUnsafePointer(to: &systemInfo.machine) {
-         $0.withMemoryRebound(to: CChar.self, capacity: 1) {
-            ptr in String.init(validatingUTF8: ptr)
-         }
-      }
-      return modelCode
    }
    
 }

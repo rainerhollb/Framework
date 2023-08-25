@@ -43,7 +43,6 @@
 
 import Foundation
 import UIKit
-//import Logging
 
 /**
  Get the struct name by additional protocol.
@@ -60,11 +59,9 @@ extension Describable {
 
 class Log : Describable {
    
-   //let DEFAULT_LOG = Logger()
-   
    static let MAX_LOG_FILES : Int = 10
    static let MAX_LOG_LINES : Int = 1000
-   static let APP_SANDBOX = Files.appSandbox()
+   static let APP_SANDBOX : URL? = Files.appSandbox()
 
    var logToConsole : Bool
    var fileIndex : Int = 0
@@ -152,6 +149,12 @@ class Log : Describable {
       }
       if UIDevice.isSimulator {
          timed("device is categorized as simulator", loggingClass)
+      }
+      if UIDevice.deviceCode != nil
+      {
+         timed("device code " + UIDevice.deviceCode!, loggingClass)
+      } else {
+         timed("device code not found", loggingClass)
       }
    }
    
@@ -250,12 +253,13 @@ class Log : Describable {
                fileUpdater!.write(("\n" + TEXT).data(using: .utf8)!)
             }
          }
+         
             
          lineIndex += 1
          if lineIndex == 1 {
             // write device infos into every log
             if fileURL() != nil { // may have been set nil in previous logFileErrorAndStopWriting since last check
-               logDeviceInfos(Self.typeName)
+               //logDeviceInfos(Self.typeName)
             }
          }
          if lineIndex >= Log.MAX_LOG_LINES {
