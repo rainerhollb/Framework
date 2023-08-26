@@ -297,5 +297,38 @@ public extension UIDevice {
       }
    }
    
+   
+   private static func isNewGeneration(modelName: String, modelNumberString: String, newGeneration: Int) -> Bool {
+      guard let IPHONE_DEVICE_NUMBER = Int(modelNumberString) else {
+         LOG.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " could not be transformed to Int", "UIDevice")
+         return false
+      }
+      if IPHONE_DEVICE_NUMBER >= newGeneration {
+         // iPhone 11 or later
+         LOG.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as new generation.", "UIDevice")
+         return true
+      }
+      LOG.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as old generation.", "UIDevice")
+      return false
+   }
+   
+   static func isNewGeneration() -> Bool {
+      if UIDevice.modelIdentifier.starts(with: "iPhone"){
+         return isNewGeneration(
+            modelName: UIDevice.modelName,
+            modelNumberString: UIDevice.modelIdentifier.subString(after: "iPhone", toBefore: ","),
+            newGeneration: 12) // iPhone 11
+      }
+      if UIDevice.modelIdentifier.starts(with: "iPad"){
+         return isNewGeneration(
+            modelName: UIDevice.modelName,
+            modelNumberString: UIDevice.modelIdentifier.subString(after: "iPad", toBefore: ","),
+            newGeneration: 11) // a guess
+      }
+      
+      LOG.timed("UIDevice.modelIdentifier " + UIDevice.modelIdentifier + " not classified.", "UIDevice")
+      return false // iPod
+   }
+
 }
 
