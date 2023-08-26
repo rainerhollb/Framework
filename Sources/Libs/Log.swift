@@ -157,6 +157,11 @@ class Log : Describable {
       } else {
          timed("device code not found", loggingClass)
       }
+      if UIDevice.isNewGeneration(){
+         timed("device classified as new generation")
+      } else {
+         timed("device classified as old generation")
+      }
    }
    
 
