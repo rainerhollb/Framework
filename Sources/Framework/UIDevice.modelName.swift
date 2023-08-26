@@ -23,7 +23,7 @@ public extension UIDevice {
    //    }
    
 
-   static var modelIdentifier : String {
+   static func modelIdentifier() -> String {
       var systemInfo = utsname()
       uname(&systemInfo)
       let machineMirror = Mirror(reflecting: systemInfo.machine)
@@ -36,7 +36,7 @@ public extension UIDevice {
    
    // https://levelup.gitconnected.com/device-information-in-swift-eef45be38109
    // same result as modelIdentifier
-   static var deviceCode: String? {
+   static func deviceCode() -> String? {
       var systemInfo = utsname()
       uname(&systemInfo)
       let modelCode = withUnsafePointer(to: &systemInfo.machine) {
@@ -48,14 +48,14 @@ public extension UIDevice {
    }
    
 
-   static var isSimulator : Bool {
-      return modelName == "iPhone Simulator"
+   static func isSimulator() -> Bool {
+      return (modelName().elementsEqual("iPhone Simulator"))
    }
       
    // https://stackoverflow.com/questions/26028918/how-to-determine-the-current-iphone-device-model
    // Jan 2023, but Swift 3
-   static var modelName: String {
-      switch modelIdentifier {
+   static func modelName() -> String {
+      switch modelIdentifier() {
             // MARK: - iPhone
          case "i386":
             return "iPhone Simulator"
@@ -256,12 +256,12 @@ public extension UIDevice {
          case "AudioAccessory5,1": return "HomePod mini"
             
             // MARK: - Unrecognized
-         default: return modelIdentifier
+         default: return modelIdentifier()
       }
    }
    
-   static var hasSmallScreen : Bool {
-      switch modelIdentifier {
+   static func hasSmallScreen() -> Bool {
+      switch modelIdentifier() {
       case "iPhone1,1": return true
       case "iPhone1,2": return true
       case "iPhone2,1": return true
@@ -315,20 +315,20 @@ public extension UIDevice {
          No Log parameter because this only allowed in extensions for private functions :-(
     */
    static func isNewGeneration() -> Bool {
-      if UIDevice.modelIdentifier.starts(with: "iPhone"){
+      if UIDevice.modelIdentifier().starts(with: "iPhone"){
          return isNewGeneration(
-            modelName: UIDevice.modelName,
-            modelNumberString: UIDevice.modelIdentifier.subString(after: "iPhone", toBefore: ","),
+            modelName: UIDevice.modelName(),
+            modelNumberString: UIDevice.modelIdentifier().subString(after: "iPhone", toBefore: ","),
             newGeneration: 12) // iPhone 11
       }
-      if UIDevice.modelIdentifier.starts(with: "iPad"){
+      if UIDevice.modelIdentifier().starts(with: "iPad"){
          return isNewGeneration(
-            modelName: UIDevice.modelName,
-            modelNumberString: UIDevice.modelIdentifier.subString(after: "iPad", toBefore: ","),
+            modelName: UIDevice.modelName(),
+            modelNumberString: UIDevice.modelIdentifier().subString(after: "iPad", toBefore: ","),
             newGeneration: 11) // a guess
       }
       
-      Log.timed("UIDevice.modelIdentifier " + UIDevice.modelIdentifier + " not classified.", "UIDevice")
+      Log.timed("UIDevice.modelIdentifier " + UIDevice.modelIdentifier() + " not classified.", "UIDevice")
       return false // iPod
    }
 
