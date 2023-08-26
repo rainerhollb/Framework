@@ -263,6 +263,7 @@ public extension UIDevice {
       }
    }
    
+   // TODO: subString verwenden, umd die vielen cases zu vermeiden
    static func hasSmallScreen() -> Bool {
       switch modelIdentifier() {
       case "iPhone1,1": return true
