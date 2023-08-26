@@ -260,7 +260,7 @@ class Log : Describable {
          if lineIndex == 1 {
             // write device infos into every log
             if fileURL() != nil { // may have been set nil in previous logFileErrorAndStopWriting since last check
-               //logDeviceInfos(Self.typeName)
+               logDeviceInfos(Self.typeName) // only allowed when no file switch is expected
             }
          }
          if lineIndex >= Log.MAX_LOG_LINES {
