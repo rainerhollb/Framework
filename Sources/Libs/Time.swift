@@ -10,7 +10,7 @@ import Foundation
 struct Time : Describable {
    
    static let FORMAT_HHMMSS = "HH:mm:ss"
-   static let FORMAT_HH_MM_SS_MILLIS = "HH:mm:ss.SSSS"
+   static let FORMAT_HH_MM_SS_MILLIS = "HH:mm:ss.SSS"
    
    /**
     Type Double is used due to frequent usage for multiplication with Doubles to get parts of a second.

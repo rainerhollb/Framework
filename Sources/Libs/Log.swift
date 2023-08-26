@@ -140,7 +140,7 @@ class Log : Describable {
    
    func logDeviceInfos( _ loggingClass: String) {
       timed("device model identifier " + UIDevice.modelIdentifier, loggingClass)
-      timed("device name " + UIDevice.current.name, loggingClass)
+      // may contain person name: timed("device name " + UIDevice.current.name, loggingClass)
       timed("device model " + UIDevice.current.model, loggingClass)
       timed("device system " + UIDevice.current.systemName, loggingClass)
       timed("device system version " + UIDevice.current.systemVersion, loggingClass)
