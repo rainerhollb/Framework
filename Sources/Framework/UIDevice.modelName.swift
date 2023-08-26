@@ -304,7 +304,6 @@ public extension UIDevice {
          return false
       }
       if IPHONE_DEVICE_NUMBER >= newGeneration {
-         // iPhone 11 or later
          LOG.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as new generation.", "UIDevice")
          return true
       }
