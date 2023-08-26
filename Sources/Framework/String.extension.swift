@@ -30,6 +30,30 @@ extension String {
       return String(self[startIndex..<endIndex])
    }
 
+   func subString(from: Int, toBefore: Character) -> String {
+      let startIndex = self.index(self.startIndex, offsetBy: from)
+      let endIndex = self.firstIndex(of: toBefore)
+      
+      if endIndex == nil{
+         return subString(from: from)
+      }
+      
+      return String(self[startIndex..<endIndex!])
+   }
+   
+   
+   func subString(after: String, toBefore: Character) -> String {
+      let startIndex = self.index(self.startIndex, offsetBy: after.count)
+      let endIndex = self.firstIndex(of: toBefore)
+      
+      if endIndex == nil{
+         return String(self[startIndex])
+      }
+      
+      return String(self[startIndex..<endIndex!])
+   }
+   
+   
    func subString(_ from: Int, _ to: Int? = nil) -> String {
       return subString(from: from, to: to)
    }

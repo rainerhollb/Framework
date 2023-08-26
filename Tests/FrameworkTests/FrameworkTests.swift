@@ -14,12 +14,16 @@ final class FrameworkTests: XCTestCase {
     }
    
    let LONG_TESTSTRING = "0123456789012345678901234567890123456789"
+   let MODEL_TESTSTRING = "iPhone14,5"
    func testStringExtensionSubstring() throws {
       print("starting testStringExtensionSubstring")
       XCTAssertTrue(LONG_TESTSTRING.subString(from: 0, to: 40).elementsEqual(LONG_TESTSTRING))
       XCTAssertTrue(LONG_TESTSTRING.subString(from: 0, to: 10).elementsEqual("0123456789"))
       XCTAssertTrue(LONG_TESTSTRING.subString(from: 0).elementsEqual(LONG_TESTSTRING))
       
+      XCTAssertTrue(MODEL_TESTSTRING.subString(from: 0, toBefore: ",").elementsEqual("iPhone14"))
+      XCTAssertTrue(MODEL_TESTSTRING.subString(after: "iPhone", toBefore: ",").elementsEqual("14"))
+
       print(LONG_TESTSTRING + ".wrapHardly(10) =")
       print(LONG_TESTSTRING.wrapHardly(charsPerLine: 10))
       XCTAssertTrue(LONG_TESTSTRING.wrapHardly(charsPerLine: 10)
