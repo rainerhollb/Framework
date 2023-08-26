@@ -80,7 +80,7 @@ class Log : Describable {
     */
    init(_ logToConsole: Bool = true, _ filename: String? = nil, isErrorLog : Bool = false) {
       self.logToConsole = logToConsole
-      if !UIDevice.isSimulator() {
+      if !Device.IS_SIMULATOR {
          print("This device is categorized as no simulator. Logs are created.");
          self.filename = filename
          if filename != nil && !isErrorLog {
@@ -139,25 +139,25 @@ class Log : Describable {
    }
    
    func logDeviceInfos( _ loggingClass: String) {
-      timed("device model identifier " + UIDevice.modelIdentifier(), loggingClass)
+      timed("device model identifier " + Device.MODEL_IDENTIFIER, loggingClass)
       // may contain person name: timed("device name " + UIDevice.current.name, loggingClass)
       timed("device model " + UIDevice.current.model, loggingClass)
       timed("device system " + UIDevice.current.systemName, loggingClass)
       timed("device system version " + UIDevice.current.systemVersion, loggingClass)
-      timed("device model name " + UIDevice.modelName(), loggingClass)
-      if UIDevice.hasSmallScreen() {
+      timed("device model name " + Device.MODEL_NAME, loggingClass)
+      if Device.HAS_SMALL_SCREEN {
          timed("device is categorized as having a small screen like iPhone 8", loggingClass)
       }
-      if UIDevice.isSimulator() {
+      if Device.IS_SIMULATOR {
          timed("device is categorized as simulator", loggingClass)
       }
-      if UIDevice.deviceCode() != nil
+      if Device.DEVICE_CODE != nil
       {
-         timed("device code " + UIDevice.deviceCode()!, loggingClass)
+         timed("device code " + Device.DEVICE_CODE!, loggingClass)
       } else {
          timed("device code not found", loggingClass)
       }
-      if UIDevice.isNewGeneration(){
+      if Device.IS_NEW_GENERATION {
          timed("device classified as new generation")
       } else {
          timed("device classified as old generation")

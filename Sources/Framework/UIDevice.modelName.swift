@@ -16,10 +16,13 @@ public extension UIDevice {
    //
    // Usage example:
    //
-   //    if UIDevice().modelName == "iPhone Simulator"{
+   //    // use a constant as wrapper if you need multiple accesses
+   //    let MODELNAME = UIDevice.modelName()
+   
+   //    if MODELNAME == "iPhone Simulator"{
    //       print("You're running on the simulator... boring!")
    //    } else {
-   //       print("Wow! Running on a \(UIDevice().modelName)")
+   //       print("Wow! Running on a \(MODELNAME)")
    //    }
    
 
