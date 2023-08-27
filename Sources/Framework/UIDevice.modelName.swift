@@ -6,7 +6,7 @@
 //  New version in XCode Projects
 //
 
-import UIKit
+import SwiftUI
 
 public extension UIDevice {
    
@@ -280,21 +280,21 @@ public extension UIDevice {
             newGeneration: 11) // a guess
       }
       
-      Log.timed("UIDevice.modelIdentifier " + UIDevice.modelIdentifier() + " not classified.", "UIDevice")
+      print("UIDevice.modelIdentifier " + UIDevice.modelIdentifier() + " not classified.", "UIDevice")
       return false // iPod
    }
 
    
    private static func isNewGeneration(modelName: String, modelNumberString: String, newGeneration: Int) -> Bool {
       guard let IPHONE_DEVICE_NUMBER = Int(modelNumberString) else {
-         Log.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " could not be transformed to Int", "UIDevice")
+         print("UIDevice.modelName " + modelName + " number " + modelNumberString + " could not be transformed to Int", "UIDevice")
          return false
       }
       if IPHONE_DEVICE_NUMBER >= newGeneration {
-         Log.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as new generation.", "UIDevice")
+         print("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as new generation.", "UIDevice")
          return true
       }
-      Log.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as old generation.", "UIDevice")
+      print("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as old generation.", "UIDevice")
       return false
    }
    

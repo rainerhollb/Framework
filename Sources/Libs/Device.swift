@@ -5,8 +5,8 @@
 //  Created by rainer on 26.08.23.
 //
 
-import Foundation
 import SwiftUI
+import Framework
 
 struct Device {
    static let MODEL_IDENTIFIER = UIDevice.modelIdentifier()
