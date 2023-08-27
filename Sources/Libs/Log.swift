@@ -62,7 +62,7 @@ class Log : Describable {
    static let MAX_LOG_FILES : Int = 10
    static let MAX_LOG_LINES : Int = 1000
    static let APP_SANDBOX : URL? = Files.appSandbox()
-
+   
    var logToConsole : Bool
    var fileIndex : Int = 0
    var lineIndex : Int = 0
@@ -73,6 +73,10 @@ class Log : Describable {
     path without file index and without extension
     */
    var filename : String? = nil
+   let LOG_GROUP = DispatchGroup()
+   var fileUpdater : FileHandle?
+   
+   let SIMULATOR_USES_LOG = true
    
    /**
     filename without path and without extension. If not set, only logging to console is possible.
@@ -80,7 +84,7 @@ class Log : Describable {
     */
    init(_ logToConsole: Bool = true, _ filename: String? = nil, isErrorLog : Bool = false) {
       self.logToConsole = logToConsole
-      if !Device.IS_SIMULATOR {
+      if SIMULATOR_USES_LOG || !Device.IS_SIMULATOR {
          print("This device is categorized as no simulator. Logs are created.");
          self.filename = filename
          if filename != nil && !isErrorLog {
@@ -137,34 +141,12 @@ class Log : Describable {
           */
       }
    }
-   
    func logDeviceInfos( _ loggingClass: String) {
-      timed("device model identifier " + Device.MODEL_IDENTIFIER, loggingClass)
-      // may contain person name: timed("device name " + UIDevice.current.name, loggingClass)
-      timed("device model " + UIDevice.current.model, loggingClass)
-      timed("device system " + UIDevice.current.systemName, loggingClass)
-      timed("device system version " + UIDevice.current.systemVersion, loggingClass)
-      timed("device model name " + Device.MODEL_NAME, loggingClass)
-      if Device.HAS_SMALL_SCREEN {
-         timed("device is categorized as having a small screen like iPhone 8", loggingClass)
-      }
-      if Device.IS_SIMULATOR {
-         timed("device is categorized as simulator", loggingClass)
-      }
-      if Device.DEVICE_CODE != nil
-      {
-         timed("device code " + Device.DEVICE_CODE!, loggingClass)
-      } else {
-         timed("device code not found", loggingClass)
-      }
-      if Device.IS_NEW_GENERATION {
-         timed("device classified as new generation")
-      } else {
-         timed("device classified as old generation")
-      }
+      LOG_GROUP.enter()
+      logDeviceInfosInGroup(loggingClass)
+      LOG_GROUP.leave()
    }
    
-
    func timed(_ text: String, _ origin: String = "") {
       let FORMATTED_TEXT = Log.logFormatted(text: text, origin: origin)
       log(FORMATTED_TEXT)
@@ -180,18 +162,18 @@ class Log : Describable {
    }
    
    /*
-   fileprivate func filePath() -> String? {
-      if filename == nil {
-         return nil
-      }
-      if Log.APP_SANDBOX == nil {
-         return nil
-      }
-
-      return Log.APP_SANDBOX!.path + "/" + filename! + String(fileIndex) + ".txt"
-   }
+    fileprivate func filePath() -> String? {
+    if filename == nil {
+    return nil
+    }
+    if Log.APP_SANDBOX == nil {
+    return nil
+    }
+    
+    return Log.APP_SANDBOX!.path + "/" + filename! + String(fileIndex) + ".txt"
+    }
     */
-
+   
    fileprivate func fileURL() -> URL? {
       if filename == nil {
          return nil
@@ -202,19 +184,16 @@ class Log : Describable {
       
       return Log.APP_SANDBOX!.appendingPathComponent(filename! + String(fileIndex) + ".txt", conformingTo: .fileURL)
    }
-
-   let LOG_GROUP = DispatchGroup()
-   var fileUpdater : FileHandle?
-
+   
    fileprivate func log(_ FORMATTED_TEXT: String) {
       if logToConsole {
          print(FORMATTED_TEXT)
       }
-
+      
       if fileURL() == nil {
          return
       }
-
+      
       LOG_GROUP.enter() // avoids confusion in line numbering and file switching
       
          let TEXT: String = String(fileIndex) + " " + String(lineIndex) + " " + FORMATTED_TEXT
@@ -225,13 +204,13 @@ class Log : Describable {
             // Deleting old seems not necessary due to String.write deleting previous content.
             // The delete is buggy.
             /*
-            if FileManager.default.fileExists(atPath: filePath()!) {
-               do {
-                  try FileManager.default.removeItem(atPath: filePath()!)
-               } catch let ERROR {
-                  logFileErrorAndStopWriting(ERROR.localizedDescription)
-               }
-            }
+             if FileManager.default.fileExists(atPath: filePath()!) {
+             do {
+             try FileManager.default.removeItem(atPath: filePath()!)
+             } catch let ERROR {
+             logFileErrorAndStopWriting(ERROR.localizedDescription)
+             }
+             }
              */
             
             // write TEXT to file's first line:
@@ -247,6 +226,10 @@ class Log : Describable {
                   } catch let ERROR {
                      logFileErrorAndStopWriting(ERROR.localizedDescription)
                   }
+                  // write device infos into every log
+                  if fileURL() != nil { // may have been set nil in previous logFileErrorAndStopWriting since last check
+                     logDeviceInfosInGroup(Self.typeName) // only allowed when no file switch is expected
+                  }
                }
             }
             
@@ -260,14 +243,7 @@ class Log : Describable {
             }
          }
          
-            
          lineIndex += 1
-         if lineIndex == 1 {
-            // write device infos into every log
-            if fileURL() != nil { // may have been set nil in previous logFileErrorAndStopWriting since last check
-               logDeviceInfos(Self.typeName) // only allowed when no file switch is expected
-            }
-         }
          if lineIndex >= Log.MAX_LOG_LINES {
             fileUpdater?.closeFile()
             fileIndex += 1
@@ -295,7 +271,7 @@ class Log : Describable {
       print(logFormatted(text: text, origin: origin))
       //DEFAULT_LOG.info(origin! + blank + ": " + text)
    }
-    
+   
    
    static func logFormatted(text: String, origin: String) -> String {
       var blank = ""
@@ -310,4 +286,44 @@ class Log : Describable {
       Log.timed(errortext, origin)
       print("*********************************************************************")
    }
+   
+   private func logDeviceInfosInGroup( _ loggingClass: String) {
+      logInGroup("device model identifier " + Device.MODEL_IDENTIFIER, loggingClass)
+      // may contain person name: timed("device name " + UIDevice.current.name, loggingClass)
+      logInGroup("device model " + UIDevice.current.model, loggingClass)
+      logInGroup("device system " + UIDevice.current.systemName, loggingClass)
+      logInGroup("device system version " + UIDevice.current.systemVersion, loggingClass)
+      logInGroup("device model name " + Device.MODEL_NAME, loggingClass)
+      if Device.HAS_SMALL_SCREEN {
+         logInGroup("device is categorized as having a small screen like iPhone 8", loggingClass)
+      }
+      if Device.IS_SIMULATOR {
+         logInGroup("device is categorized as simulator", loggingClass)
+      }
+      if Device.DEVICE_CODE != nil
+      {
+       logInGroup("device code " + Device.DEVICE_CODE!, loggingClass)
+      } else {
+         logInGroup("device code not found", loggingClass)
+      }
+      if Device.IS_NEW_GENERATION {
+         logInGroup("device classified as new generation")
+      } else {
+         logInGroup("device classified as old generation")
+      }
+   }
+   
+   /**
+    Log to file without entering and leaving the log group semaphore.
+    PRE: fileUpdater is set => log group was entered
+    */
+   private func logInGroup(_ text: String, _ origin: String = "") {
+      let FORMATTED_TEXT = Log.logFormatted(text: text, origin: origin)
+      print(FORMATTED_TEXT)
+      if fileUpdater != nil {
+         fileUpdater!.seekToEndOfFile()
+         fileUpdater!.write(("\n" + FORMATTED_TEXT).data(using: .utf8)!)
+      }
+   }
+   
 }
