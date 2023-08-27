@@ -4,10 +4,11 @@
 //
 //  Created by Rainer on 25.07.23.
 //  following https://stackoverflow.com/questions/25888272/track-cellular-data-usage-using-swift
+//  integrated extension into the class
 //
 import Foundation
 
-extension SystemDataUsage {
+class SystemDataUsage {
    
    // currently used bytes of the providers contract interval
    public static var wifiComplete: UInt64 {
@@ -17,11 +18,7 @@ extension SystemDataUsage {
    public static var wwanComplete: UInt64 {
       return SystemDataUsage.getDataUsage().wirelessWanDataSent + SystemDataUsage.getDataUsage().wirelessWanDataReceived
    }
-   
-}
 
-class SystemDataUsage {
-   
    private static let wwanInterfacePrefix = "pdp_ip"
    private static let wifiInterfacePrefix = "en"
    
