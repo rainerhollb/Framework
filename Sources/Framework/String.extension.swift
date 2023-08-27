@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension String {
+public extension String {
    
    /**
     subString using offset 0 for from. from = n => from n+1 th character,
