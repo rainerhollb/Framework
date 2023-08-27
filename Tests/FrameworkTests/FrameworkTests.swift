@@ -10,7 +10,7 @@ final class FrameworkTests: XCTestCase {
     }
     
     func testUIDeviceModelname() throws {
-        XCTAssertTrue(UIDevice.modelName.contains("iPhone") || UIDevice.modelName.contains("iPad") )
+       XCTAssertTrue(UIDevice.modelName().contains("iPhone") || UIDevice.modelName().contains("iPad") )
     }
    
    let LONG_TESTSTRING = "0123456789012345678901234567890123456789"
