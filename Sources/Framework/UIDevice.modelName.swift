@@ -263,58 +263,6 @@ public extension UIDevice {
       }
    }
    
-   // TODO: subString verwenden, umd die vielen cases zu vermeiden
-   static func hasSmallScreen() -> Bool {
-      switch modelIdentifier() {
-      case "iPhone1,1": return true
-      case "iPhone1,2": return true
-      case "iPhone2,1": return true
-      case "iPhone3,1": return true
-      case "iPhone3,2": return true
-      case "iPhone3,3": return true
-      case "iPhone4,1": return true
-      case "iPhone5,1": return true
-      case "iPhone5,2": return true
-      case "iPhone5,3": return true
-      case "iPhone5,4": return true
-      case "iPhone6,1": return true
-      case "iPhone6,2": return true
-      case "iPhone7,1": return true
-      case "iPhone7,2": return true
-      case "iPhone8,1": return true
-         //case "iPhone8,2": return "iPhone 6s Plus"
-      case "iPhone8,4": return true
-      case "iPhone9,1": return true
-         //case "iPhone9,2": return "iPhone 7 Plus"
-      case "iPhone9,3": return true
-         //case "iPhone9,4": return "iPhone 7 Plus"
-      case "iPhone10,1": return true
-         //case "iPhone10,2": return "iPhone 8 Plus"
-         //case "iPhone10,3": return "iPhone X Global"
-      case "iPhone10,4": return true
-      default:
-         switch UIDevice.current.name {
-            case "iPhone 8":
-               return true // simulator
-            default: return false
-         }
-      }
-   }
-   
-   
-   private static func isNewGeneration(modelName: String, modelNumberString: String, newGeneration: Int) -> Bool {
-      guard let IPHONE_DEVICE_NUMBER = Int(modelNumberString) else {
-         Log.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " could not be transformed to Int", "UIDevice")
-         return false
-      }
-      if IPHONE_DEVICE_NUMBER >= newGeneration {
-         Log.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as new generation.", "UIDevice")
-         return true
-      }
-      Log.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as old generation.", "UIDevice")
-      return false
-   }
-   
    /**
          No Log parameter because this only allowed in extensions for private functions :-(
     */
@@ -336,5 +284,19 @@ public extension UIDevice {
       return false // iPod
    }
 
+   
+   private static func isNewGeneration(modelName: String, modelNumberString: String, newGeneration: Int) -> Bool {
+      guard let IPHONE_DEVICE_NUMBER = Int(modelNumberString) else {
+         Log.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " could not be transformed to Int", "UIDevice")
+         return false
+      }
+      if IPHONE_DEVICE_NUMBER >= newGeneration {
+         Log.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as new generation.", "UIDevice")
+         return true
+      }
+      Log.timed("UIDevice.modelName " + modelName + " number " + modelNumberString + " is classified as old generation.", "UIDevice")
+      return false
+   }
+   
 }
 

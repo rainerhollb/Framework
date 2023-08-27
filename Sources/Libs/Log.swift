@@ -302,7 +302,7 @@ class Log : Describable {
       }
       if Device.DEVICE_CODE != nil
       {
-       logInGroup("device code " + Device.DEVICE_CODE!, loggingClass)
+         logInGroup("device code " + Device.DEVICE_CODE!, loggingClass)
       } else {
          logInGroup("device code not found", loggingClass)
       }
@@ -311,6 +311,7 @@ class Log : Describable {
       } else {
          logInGroup("device classified as old generation")
       }
+      logInGroup("device screen width \(UIScreen.main.bounds.width) * height \(UIScreen.main.bounds.height)")
    }
    
    /**

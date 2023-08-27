@@ -14,7 +14,8 @@ struct Device {
    static let DEVICE_CODE = UIDevice.deviceCode()
 
    static let IS_SIMULATOR = UIDevice.isSimulator()
-   static let HAS_SMALL_SCREEN = UIDevice.hasSmallScreen()
+   static let HAS_SMALL_SCREEN = UIScreen.main.bounds.height <= 700 // i.e. iPhone 7 and 8 have 667
+
    static let IS_NEW_GENERATION = UIDevice.isNewGeneration()
 
 }
