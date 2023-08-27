@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit
+import SwiftUI
 
 struct Device {
    static let MODEL_IDENTIFIER = UIDevice.modelIdentifier()
@@ -18,5 +18,8 @@ struct Device {
    static let HAS_LARGE_SCREEN_WIDTH = UIScreen.main.bounds.width >= 700
 
    static let IS_NEW_GENERATION = UIDevice.isNewGeneration()
+
+   // not strict Device, more GUI elements
+   static let PICKER_DEFAULT_WHEEL_FONT: Font = .title3
 
 }
