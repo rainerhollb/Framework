@@ -7,18 +7,18 @@
 
 import Foundation
 
-struct Time : Describable {
+public struct Time : Describable {
    
-   static let FORMAT_HHMMSS = "HH:mm:ss"
-   static let FORMAT_HH_MM_SS_MILLIS = "HH:mm:ss.SSS"
+   public static let FORMAT_HHMMSS = "HH:mm:ss"
+   public static let FORMAT_HH_MM_SS_MILLIS = "HH:mm:ss.SSS"
    
    /**
     Type Double is used due to frequent usage for multiplication with Doubles to get parts of a second.
     For other usage convert to required type!
     */
-   static let NANOS_PER_SECOND : Double = 1000000000
+   public static let NANOS_PER_SECOND : Double = 1000000000
    
-   static func now() -> Date {
+   public static func now() -> Date {
       return Date()
    }
    
@@ -26,7 +26,7 @@ struct Time : Describable {
    /**
     * nanoseconds between date1 and date2. 0 if date2 is before date1.
     */
-   static func nanosecondsTo(date1: Date, date2: Date,
+   public static func nanosecondsTo(date1: Date, date2: Date,
                              caller: String? = "") -> UInt64 {
       //Log.timed(caller! + "nanosecondsTo (" + timeString(date1,FORMAT_HH_MM_SS_MILLIS) + ", " + timeString(date2,FORMAT_HH_MM_SS_MILLIS) + ") = \(date1.distance(to: date2)) s", Self.typeName)
       return UInt64(
@@ -39,7 +39,7 @@ struct Time : Describable {
    
    /** Not thread safe! If thread safety is required, add a new method using its own clock formatter!
     */
-   static func timeString(_ date: Date, _ format: String) -> String {
+   public static func timeString(_ date: Date, _ format: String) -> String {
       CLOCK_FORMATTER.dateFormat = format
       return CLOCK_FORMATTER.string(from: date)
    }
@@ -50,7 +50,7 @@ struct Time : Describable {
    
    static let CALENDAR = Calendar.current
    
-   static func fullSecondDate(_ date: Date,
+   public static func fullSecondDate(_ date: Date,
                               _ caller: String? = "") throws -> Date {
       let COMPONENTS = CALENDAR.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
       let D : Date? = CALENDAR.date(from: COMPONENTS)
@@ -63,7 +63,7 @@ struct Time : Describable {
    
    static let ONE_SECOND : TimeInterval = 1.0
    
-   static func wait(_ nanos: UInt64, _ callerDescripton: String = "") async {
+   public static func wait(_ nanos: UInt64, _ callerDescripton: String = "") async {
       do {
          try await Task.sleep(nanoseconds: nanos)
       } catch let ERROR {
@@ -71,7 +71,7 @@ struct Time : Describable {
       }
    }
 
-   static func waitUntilNextFullSecond(
+   public static func waitUntilNextFullSecond(
       additional: TimeInterval? = 0.0,
       expectedMaximumNanos: UInt64? = nil,
       expectedMinimumNanos: UInt64? = nil,

@@ -57,7 +57,7 @@ extension Describable {
    }
 }
 
-class Log : Describable {
+public class Log : Describable {
    
    static let MAX_LOG_FILES : Int = 10
    static let MAX_LOG_LINES : Int = 1000
@@ -82,7 +82,7 @@ class Log : Describable {
     filename without path and without extension. If not set, only logging to console is possible.
     complete path will be: <path to app documents> + filename + fileindex + ".txt"
     */
-   init(_ logToConsole: Bool = true, _ filename: String? = nil, isErrorLog : Bool = false) {
+   public init(_ logToConsole: Bool = true, _ filename: String? = nil, isErrorLog : Bool = false) {
       self.logToConsole = logToConsole
       if SIMULATOR_USES_LOG || !Device.IS_SIMULATOR {
          print("This device is categorized as no simulator. Logs are created.");
@@ -141,19 +141,19 @@ class Log : Describable {
           */
       }
    }
-   func logDeviceInfos( _ loggingClass: String) {
+   public func logDeviceInfos( _ loggingClass: String) {
       LOG_GROUP.enter()
       logDeviceInfosInGroup(loggingClass)
       LOG_GROUP.leave()
    }
    
-   func timed(_ text: String, _ origin: String = "") {
+   public func timed(_ text: String, _ origin: String = "") {
       let FORMATTED_TEXT = Log.logFormatted(text: text, origin: origin)
       log(FORMATTED_TEXT)
    }
    
    
-   func timedError(_ errortext: String, _ origin: String = ""){
+   public func timedError(_ errortext: String, _ origin: String = ""){
       log("************************** ERROR ************************************")
       let FORMATTED_TEXT = Log.logFormatted(text: errortext, origin: origin)
       log(FORMATTED_TEXT)

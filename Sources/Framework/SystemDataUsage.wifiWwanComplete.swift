@@ -8,7 +8,7 @@
 //
 import Foundation
 
-class SystemDataUsage {
+public class SystemDataUsage {
    
    // currently used bytes of the providers contract interval
    public static var wifiComplete: UInt64 {

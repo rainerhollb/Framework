@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Files : Describable {
+public struct Files : Describable {
    
 
    /**
@@ -16,7 +16,7 @@ struct Files : Describable {
     
     PRE: info.plist contains Support Document Browser = YES to be able to access the files via app Files + a reader or EasyEditText
     */
-   static func appSandbox() -> URL? {
+   public static func appSandbox() -> URL? {
       // alternative, needs to be tested:
       testHomeAlternatives()
       

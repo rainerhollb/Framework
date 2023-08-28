@@ -8,34 +8,34 @@
 import Foundation
 
 
-actor TextActor {
+public actor TextActor {
   var text : String
   
-  init(_ text: String){
+   public init(_ text: String){
     self.text = text
   }
   
-  func update(_ text: String) {
+   public func update(_ text: String) {
     self.text = text
   }
   
-  func get() -> String {
+   public func get() -> String {
     return text
   }
 }
 
-actor BoolActor {
+public actor BoolActor {
   var bool : Bool
   
-  init(_ bool : Bool){
+   public init(_ bool : Bool){
     self.bool = bool
   }
   
-  func update(_ bool : Bool) {
+   public func update(_ bool : Bool) {
     self.bool = bool
   }
   
-  func get() -> Bool {
+   public func get() -> Bool {
     return bool
   }
 }
