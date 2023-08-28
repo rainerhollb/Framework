@@ -79,10 +79,16 @@ public class Log : Describable {
    let SIMULATOR_USES_LOG = true
    
    /**
-    filename without path and without extension. If not set, only logging to console is possible.
-    complete path will be: <path to app documents> + filename + fileindex + ".txt"
+    Caution: log files are causing crashes at seekEndOfFile even if logDeviceInfosInGroup is deactivated!
+    Use filename only in test environment!
+    If you need logging specify filename without path and without extension. If not set, only logging to console is possible.
+    This path will result: <path to app documents> + filename + fileindex + ".txt"
     */
-   public init(_ logToConsole: Bool = true, _ filename: String? = nil, isErrorLog : Bool = false) {
+   public init(
+      _ logToConsole: Bool = true,
+      _ filename: String? = nil,
+      isErrorLog : Bool = false)
+   {
       self.logToConsole = logToConsole
       if SIMULATOR_USES_LOG || !Device.IS_SIMULATOR {
          print("This device is categorized as no simulator. Logs are created.");
