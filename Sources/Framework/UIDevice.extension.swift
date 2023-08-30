@@ -270,13 +270,13 @@ public extension UIDevice {
       if UIDevice.modelIdentifier().starts(with: "iPhone"){
          return isNewGeneration(
             modelName: UIDevice.modelName(),
-            modelNumberString: UIDevice.modelIdentifier().subString(after: "iPhone", toBefore: ","),
+            modelNumberString: UIDevice.modelIdentifier().subString(previousStartString: "iPhone", toSeparator: ","),
             newGeneration: 12) // iPhone 11
       }
       if UIDevice.modelIdentifier().starts(with: "iPad"){
          return isNewGeneration(
             modelName: UIDevice.modelName(),
-            modelNumberString: UIDevice.modelIdentifier().subString(after: "iPad", toBefore: ","),
+            modelNumberString: UIDevice.modelIdentifier().subString(previousStartString: "iPad", toSeparator: ","),
             newGeneration: 11) // a guess
       }
       

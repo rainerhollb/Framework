@@ -21,8 +21,9 @@ final class FrameworkTests: XCTestCase {
       XCTAssertTrue(LONG_TESTSTRING.subString(from: 0, to: 10).elementsEqual("0123456789"))
       XCTAssertTrue(LONG_TESTSTRING.subString(from: 0).elementsEqual(LONG_TESTSTRING))
       
-      XCTAssertTrue(MODEL_TESTSTRING.subString(from: 0, toBefore: ",").elementsEqual("iPhone14"))
-      XCTAssertTrue(MODEL_TESTSTRING.subString(after: "iPhone", toBefore: ",").elementsEqual("14"))
+      XCTAssertTrue(MODEL_TESTSTRING.subString(from: 0, toSeparator: ",").elementsEqual("iPhone14"))
+      XCTAssertTrue(MODEL_TESTSTRING.subString(previousStartString: "iPhone", toSeparator: ",").elementsEqual("14"))
+      XCTAssertTrue(MODEL_TESTSTRING.subString(previousStartString: ",").elementsEqual("5"))
 
       print(LONG_TESTSTRING + ".wrapHardly(10) =")
       print(LONG_TESTSTRING.wrapHardly(charsPerLine: 10))
