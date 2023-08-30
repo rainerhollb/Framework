@@ -4,9 +4,24 @@
 //
 //  Created by Rainer on 25.07.23.
 //  following https://stackoverflow.com/questions/25888272/track-cellular-data-usage-using-swift
-//  integrated extension into the class
+//  integrated extension into the class because its separation reason was not clear.
 //
 import Foundation
+
+
+struct DataUsageInfo {
+   var wifiReceived: UInt64 = 0
+   var wifiSent: UInt64 = 0
+   var wirelessWanDataReceived: UInt64 = 0
+   var wirelessWanDataSent: UInt64 = 0
+   
+   mutating func updateInfoByAdding(_ info: DataUsageInfo) {
+      wifiSent += info.wifiSent
+      wifiReceived += info.wifiReceived
+      wirelessWanDataSent += info.wirelessWanDataSent
+      wirelessWanDataReceived += info.wirelessWanDataReceived
+   }
+}
 
 public class SystemDataUsage {
    
@@ -71,18 +86,3 @@ public class SystemDataUsage {
       return dataUsageInfo
    }
 }
-
-struct DataUsageInfo {
-   var wifiReceived: UInt64 = 0
-   var wifiSent: UInt64 = 0
-   var wirelessWanDataReceived: UInt64 = 0
-   var wirelessWanDataSent: UInt64 = 0
-   
-   mutating func updateInfoByAdding(_ info: DataUsageInfo) {
-      wifiSent += info.wifiSent
-      wifiReceived += info.wifiReceived
-      wirelessWanDataSent += info.wirelessWanDataSent
-      wirelessWanDataReceived += info.wirelessWanDataReceived
-   }
-}
-
