@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 import Framework
-import AVKit
 
 public struct Cellular : Describable {
    
@@ -152,7 +151,6 @@ public struct Cellular : Describable {
       _ stopConsumerActor: BoolActor,
       additionalInfo: String
    ) async {
-      AudioServicesPlaySystemSound(1103)
       let ERROR_MESSAGE = "MOBILE_LIMIT " + MOBILE_LIMIT + " is not handled in checkCellularConsumption, " + additionalInfo
       log.timedError(ERROR_MESSAGE, Self.typeName)
       cellularUsageText = ERROR_MESSAGE
@@ -202,7 +200,6 @@ public struct Cellular : Describable {
                   return
             }
             mobileLimit = limit
-            
       }
       if mobileLimit == nil {
          log.timed("Determined no mobile limit", Self.typeName)

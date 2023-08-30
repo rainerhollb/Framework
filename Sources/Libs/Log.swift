@@ -42,6 +42,7 @@
 
 import Foundation
 import UIKit
+import AVKit
 
 /**
  Get the struct name by additional protocol.
@@ -159,6 +160,7 @@ public class Log : Describable {
       let FORMATTED_TEXT = Log.logFormatted(text: errortext, origin: origin)
       log(FORMATTED_TEXT)
       log("*********************************************************************")
+      AudioServicesPlaySystemSound(1103)
       errorLog?.log(FORMATTED_TEXT)
    }
    
