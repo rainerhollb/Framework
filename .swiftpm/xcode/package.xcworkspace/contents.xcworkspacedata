@@ -4,4 +4,16 @@
    <FileRef
       location = "self:">
    </FileRef>
+   <FileRef
+      location = "group:../../Package.swift">
+   </FileRef>
+   <FileRef
+      location = "group:../../README.md">
+   </FileRef>
+   <FileRef
+      location = "group:../../Sources">
+   </FileRef>
+   <FileRef
+      location = "group:../../Tests">
+   </FileRef>
 </Workspace>
