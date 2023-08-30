@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Framework
+import Extensions
 
 public struct Device {
    public static let MODEL_IDENTIFIER = UIDevice.modelIdentifier()

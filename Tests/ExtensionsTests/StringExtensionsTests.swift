@@ -1,13 +1,7 @@
 import XCTest
-@testable import Framework
+@testable import Extensions
 
-final class FrameworkTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(Framework().text, "Hello, World!")
-    }
+final class StringExtensionsTests: XCTestCase {
     
     func testUIDeviceModelname() throws {
        XCTAssertTrue(UIDevice.modelName().contains("iPhone") || UIDevice.modelName().contains("iPad") )
