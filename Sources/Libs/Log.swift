@@ -66,7 +66,8 @@ public class Log : Describable {
    var logToConsole : Bool
    var fileIndex : Int = 0
    var lineIndex : Int = 0
-   
+   var tickOnError: UInt32? = nil
+
    var errorLog : Log? = nil
    
    /**
@@ -143,6 +144,15 @@ public class Log : Describable {
          }
    }
    
+   // configuration:
+   
+   public func setTickOnError(_ tickCode : UInt32 = 1103) -> Log {
+      tickOnError = tickCode
+      return self
+   }
+   
+   // logging:
+   
    public func logDeviceInfos( _ loggingClass: String) {
       LOG_GROUP.enter()
       logDeviceInfosInGroup(loggingClass)
@@ -154,15 +164,18 @@ public class Log : Describable {
       log(FORMATTED_TEXT)
    }
    
-   
    public func timedError(_ errortext: String, _ origin: String = ""){
       log("************************** ERROR ************************************")
       let FORMATTED_TEXT = Log.logFormatted(text: errortext, origin: origin)
       log(FORMATTED_TEXT)
       log("*********************************************************************")
-      AudioServicesPlaySystemSound(1103)
+      if tickOnError != nil {
+         AudioServicesPlaySystemSound(tickOnError!)
+      }
       errorLog?.log(FORMATTED_TEXT)
    }
+   
+   // fileprivate
    
    fileprivate func fileURL() -> URL? {
       if filename == nil {
