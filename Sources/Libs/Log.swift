@@ -159,6 +159,10 @@ public class Log : Describable {
       LOG_GROUP.leave()
    }
    
+   /**
+    To use origin, add Desribable protocol to the using struct or class and use Self.typeName as 2nd argument in this call.
+    In static code, Self can be omitted.
+    */
    public func timed(_ text: String, _ origin: String = "") {
       let FORMATTED_TEXT = Log.logFormatted(text: text, origin: origin)
       log(FORMATTED_TEXT)
@@ -175,7 +179,29 @@ public class Log : Describable {
       errorLog?.log(FORMATTED_TEXT)
    }
    
-   // fileprivate
+   // static, if no object is available or possible to create:
+   
+   static func timed(_ text: String, _ origin: String = ""){
+      print(logFormatted(text: text, origin: origin))
+      //DEFAULT_LOG.info(origin! + blank + ": " + text)
+   }
+   
+   static func timedError(_ errortext: String, _ origin: String = ""){
+      print("************************** ERROR ************************************")
+      Log.timed(errortext, origin)
+      print("*********************************************************************")
+   }
+   
+   
+   // fileprivate, private
+
+   private static func logFormatted(text: String, origin: String) -> String {
+      var blank = ""
+      if origin != "" {
+         blank = " "
+      }
+      return Time.timeString(Time.now(),Time.FORMAT_HH_MM_SS_MILLIS) + " " + origin + blank + ": " + text
+   }
    
    fileprivate func fileURL() -> URL? {
       if filename == nil {
@@ -265,30 +291,6 @@ public class Log : Describable {
       Log.timedError(error + "\nDeactivated file logging.")
    }
    
-   /**
-    To use origin, add Desribable protocol to the using struct or class and use Self.typeName as 2nd argument in this call.
-    In static code, Self can be omitted.
-    */
-   
-   static func timed(_ text: String, _ origin: String = ""){
-      print(logFormatted(text: text, origin: origin))
-      //DEFAULT_LOG.info(origin! + blank + ": " + text)
-   }
-   
-   
-   static func logFormatted(text: String, origin: String) -> String {
-      var blank = ""
-      if origin != "" {
-         blank = " "
-      }
-      return Time.timeString(Time.now(),Time.FORMAT_HH_MM_SS_MILLIS) + " " + origin + blank + ": " + text
-   }
-   
-   static func timedError(_ errortext: String, _ origin: String = ""){
-      print("************************** ERROR ************************************")
-      Log.timed(errortext, origin)
-      print("*********************************************************************")
-   }
    
    private func logDeviceInfosInGroup( _ loggingClass: String) {
       logInGroup("device model identifier " + Device.MODEL_IDENTIFIER, loggingClass)
