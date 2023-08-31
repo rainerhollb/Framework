@@ -42,9 +42,9 @@ public struct Cellular : Describable {
    static let MOBILE_LIMIT_300MB = "300 " + Units.MB
    static let MOBILE_LIMIT_1GB = "1 " + Units.GB
    static let MOBILE_LIMIT_3GB = "3 " + Units.GB
-   static let MOBILE_LIMIT_10GB = "10 " + Units.GB
-   static let MOBILE_LIMIT_30GB = "30 " + Units.GB
-   static let MOBILE_LIMIT_100GB = "100 " + Units.GB
+   // static let MOBILE_LIMIT_10GB = "10 " + Units.GB
+   // static let MOBILE_LIMIT_30GB = "30 " + Units.GB
+   // static let MOBILE_LIMIT_100GB = "100 " + Units.GB
    static let MOBILE_LIMIT_UNLIMITED = "unlimited flat"
    
    public static let MOBILE_LIMITS = [
@@ -57,9 +57,10 @@ public struct Cellular : Describable {
       MOBILE_LIMIT_300MB,
       MOBILE_LIMIT_1GB,
       MOBILE_LIMIT_3GB,
+      /* not realistic:
       MOBILE_LIMIT_10GB,
       MOBILE_LIMIT_30GB,
-      MOBILE_LIMIT_100GB,
+      MOBILE_LIMIT_100GB, */
       MOBILE_LIMIT_UNLIMITED]
    
    /**
