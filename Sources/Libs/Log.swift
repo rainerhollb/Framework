@@ -294,7 +294,8 @@ public class Log : Describable {
    
    private func logDeviceInfosInGroup( _ loggingClass: String) {
       logInGroup("device model identifier " + Device.MODEL_IDENTIFIER, loggingClass)
-      // may contain person name: timed("device name " + UIDevice.current.name, loggingClass)
+      // may contain person name:
+      logInGroup("device name " + UIDevice.current.name, loggingClass)
       logInGroup("device model " + UIDevice.current.model, loggingClass)
       logInGroup("device system " + UIDevice.current.systemName, loggingClass)
       logInGroup("device system version " + UIDevice.current.systemVersion, loggingClass)
