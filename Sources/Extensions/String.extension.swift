@@ -78,4 +78,16 @@ public extension String {
       return String(WITHOUT_STARTSTRING[..<endIndex!])
    }
    
+   /**
+    returns self + "s" if number is != 1, else self
+    */
+   func sIfPlural(_ number: Int) -> String {
+      if number == 1 {
+         return self
+      } else {
+         return self + "s"
+      }
+   }
+   
+
 }
