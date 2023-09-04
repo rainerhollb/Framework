@@ -9,6 +9,10 @@ import Foundation
 
 public extension String {
    
+   func index(of: Int) -> String.Index {
+      return self.index(self.startIndex, offsetBy: of)
+   }
+   
    /**
     subString using offset 0 for from. from = n => from n+1 th character,
     using offset 1 for to. to = n => n th character is included.
@@ -20,26 +24,26 @@ public extension String {
     This makes it difficuilt to use the slicing parameters with integer parameters.
     */
    func subString(from: Int, to: Int? = nil) -> String {
-      let startIndex = self.index(self.startIndex, offsetBy: from)
+      let startIndex = index(of: from)
       var endIndex : String.Index
       if to == nil {
-         endIndex = self.index(self.startIndex, offsetBy: self.count)
+         endIndex = index(of: self.count)
       } else {
-         endIndex = self.index(self.startIndex, offsetBy: to!)
+         endIndex = index(of: to!)
       }
       return String(self[startIndex..<endIndex])
    }
    
    func subString(from: Int, toSeparator: Character?) -> String {
-      let FROM_INDEX = self.index(self.startIndex, offsetBy: from)
+      let FROM_INDEX = index(of: from)
       return subString(fromIndex:FROM_INDEX, toBefore:toSeparator)
    }
    
    /**
-    previousStartString: substring which starts self and is before the required subString - the length is important, not its contents
+    previousStartString: substring which is STARTING self and is before the required subString - the length is important, not its contents
     */
    func subString(previousStartString: String, toSeparator: Character? = nil) -> String {
-      let FROM_INDEX = self.index(self.startIndex, offsetBy: previousStartString.count)
+      let FROM_INDEX = index(of: previousStartString.count)
       return subString(fromIndex:FROM_INDEX, toBefore:toSeparator)
    }
    
@@ -51,6 +55,14 @@ public extension String {
    func wrapHardly(charsPerLine: Int) -> String {
       if self.count <= charsPerLine {
          return self
+      }
+      
+      if self.subString(from: 0,to: charsPerLine).contains("\n") {
+         let RETURN_POSITION = self.firstIndex(of: "\n")
+         return self.subString(from: 0, toSeparator: "\n")
+            + "\n"
+            + String(self[index(after: RETURN_POSITION!)..<index(of: self.count)])
+                  .wrapHardly(charsPerLine: charsPerLine)
       }
       
       return
