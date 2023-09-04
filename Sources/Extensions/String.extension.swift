@@ -36,7 +36,7 @@ public extension String {
    
    func subString(from: Int, toSeparator: Character?) -> String {
       let FROM_INDEX = index(of: from)
-      return subString(fromIndex:FROM_INDEX, toBefore:toSeparator)
+      return subString(fromIndex:FROM_INDEX, toSeparator: toSeparator)
    }
    
    /**
@@ -44,7 +44,7 @@ public extension String {
     */
    func subString(previousStartString: String, toSeparator: Character? = nil) -> String {
       let FROM_INDEX = index(of: previousStartString.count)
-      return subString(fromIndex:FROM_INDEX, toBefore:toSeparator)
+      return subString(fromIndex:FROM_INDEX, toSeparator:toSeparator)
    }
    
    
@@ -57,11 +57,15 @@ public extension String {
          return self
       }
       
-      if self.subString(from: 0,to: charsPerLine).contains("\n") {
-         let RETURN_POSITION = self.firstIndex(of: "\n")
-         return self.subString(from: 0, toSeparator: "\n")
+      if self.subString(from: 0, to: charsPerLine+1).contains("\n") {
+         let BEFORE_CR = self.subString(from: 0, toSeparator: "\n")
+         print("wrapHardly BEFORE_CR: \"" + BEFORE_CR + "\"")
+         let CR_POSITION = self.firstIndex(of: "\n")
+         let AFTER_CR = String(self[index(after: CR_POSITION!)..<index(of: self.count)])
+         print("wrapHardly AFTER_CR: \"" + AFTER_CR + "\"")
+         return BEFORE_CR
             + "\n"
-            + String(self[index(after: RETURN_POSITION!)..<index(of: self.count)])
+            + AFTER_CR
                   .wrapHardly(charsPerLine: charsPerLine)
       }
       
@@ -73,14 +77,14 @@ public extension String {
    }
    
    
-   fileprivate func subString(fromIndex: String.Index, toBefore: Character?) -> String {
+   fileprivate func subString(fromIndex: String.Index, toSeparator: Character?) -> String {
       let WITHOUT_STARTSTRING = self[fromIndex...]
       
       var endIndex : String.Index?
-      if toBefore == nil {
+      if toSeparator == nil {
          endIndex = nil
       } else {
-         endIndex = WITHOUT_STARTSTRING.firstIndex(of: toBefore!)
+         endIndex = WITHOUT_STARTSTRING.firstIndex(of: toSeparator!)
       }
       
       if endIndex == nil {
