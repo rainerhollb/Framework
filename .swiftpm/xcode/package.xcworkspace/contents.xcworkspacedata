@@ -10,10 +10,57 @@
    <FileRef
       location = "group:../../README.md">
    </FileRef>
-   <FileRef
-      location = "group:../../Sources">
-   </FileRef>
-   <FileRef
-      location = "group:../../Tests">
-   </FileRef>
+   <Group
+      location = "group:../../Sources"
+      name = "Sources">
+      <Group
+         location = "group:Extensions"
+         name = "Extensions">
+         <FileRef
+            location = "group:UIDevice.extension.swift">
+         </FileRef>
+         <FileRef
+            location = "group:String.extension.swift">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Libs"
+         name = "Libs">
+         <FileRef
+            location = "group:Cellular.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Units.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Log.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Time.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Files.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Actors.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Device.swift">
+         </FileRef>
+         <FileRef
+            location = "group:SystemDataUsage.swift">
+         </FileRef>
+      </Group>
+   </Group>
+   <Group
+      location = "group:../../Tests"
+      name = "Tests">
+      <Group
+         location = "group:ExtensionsTests"
+         name = "ExtensionsTests">
+         <FileRef
+            location = "group:StringExtensionsTests.swift">
+         </FileRef>
+      </Group>
+   </Group>
 </Workspace>
