@@ -59,10 +59,10 @@ public extension String {
       
       if self.subString(from: 0, to: charsPerLine+1).contains("\n") {
          let BEFORE_CR = self.subString(from: 0, toSeparator: "\n")
-         print("wrapHardly BEFORE_CR: \"" + BEFORE_CR + "\"")
+         // print("wrapHardly BEFORE_CR: \"" + BEFORE_CR + "\"")
          let CR_POSITION = self.firstIndex(of: "\n")
          let AFTER_CR = String(self[index(after: CR_POSITION!)..<index(of: self.count)])
-         print("wrapHardly AFTER_CR: \"" + AFTER_CR + "\"")
+         // print("wrapHardly AFTER_CR: \"" + AFTER_CR + "\"")
          return BEFORE_CR
             + "\n"
             + AFTER_CR
