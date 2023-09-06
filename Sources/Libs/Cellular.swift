@@ -125,6 +125,7 @@ public struct Cellular : Describable {
             )
             lastCheckDate = Time.now()
             
+            log.timed("cellularUsageText: " + cellularUsageText, Self.typeName)
             await mobileConsumptionTextActor.update(cellularUsageText)
             
             // complete the second
