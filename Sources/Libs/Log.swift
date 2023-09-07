@@ -155,7 +155,7 @@ public class Log : Describable {
    
    public func logDeviceInfos( _ loggingClass: String) {
       LOG_GROUP.enter()
-      logDeviceInfosInGroup(loggingClass)
+      Device.logDeviceInfosInGroup(self, loggingClass)
       LOG_GROUP.leave()
    }
    
@@ -257,7 +257,7 @@ public class Log : Describable {
                   }
                   // write device infos into every log
                   if fileURL() != nil { // may have been set nil in previous logFileErrorAndStopWriting since last check
-                     logDeviceInfosInGroup(Self.typeName) // only allowed when no file switch is expected
+                     Device.logDeviceInfosInGroup(self, Self.typeName) // only allowed when no file switch is expected
                   }
                }
             }
@@ -292,40 +292,12 @@ public class Log : Describable {
    }
    
    
-   private func logDeviceInfosInGroup( _ loggingClass: String) {
-      logInGroup("device model identifier " + Device.MODEL_IDENTIFIER, loggingClass)
-      
-      logInGroup("device name " + Device.DEVICE_NAME, loggingClass)
-      
-      logInGroup("device model " + UIDevice.current.model, loggingClass)
-      logInGroup("device system " + UIDevice.current.systemName, loggingClass)
-      logInGroup("device system version " + UIDevice.current.systemVersion, loggingClass)
-      logInGroup("device model name " + Device.MODEL_NAME, loggingClass)
-      if Device.HAS_SMALL_SCREEN {
-         logInGroup("device is categorized as having a small screen like iPhone 8", loggingClass)
-      }
-      if Device.IS_SIMULATOR {
-         logInGroup("device is categorized as simulator", loggingClass)
-      }
-      if Device.DEVICE_CODE != nil
-      {
-         logInGroup("device code " + Device.DEVICE_CODE!, loggingClass)
-      } else {
-         logInGroup("device code not found", loggingClass)
-      }
-      if Device.IS_NEW_GENERATION {
-         logInGroup("device classified as new generation")
-      } else {
-         logInGroup("device classified as old generation")
-      }
-      logInGroup("device screen width \(UIScreen.main.bounds.width) * height \(UIScreen.main.bounds.height)")
-   }
    
    /**
     Log to file without entering and leaving the log group semaphore.
     PRE: fileUpdater is set => log group was entered
     */
-   private func logInGroup(_ text: String, _ origin: String = "") {
+   func logInGroup(_ text: String, _ origin: String = "") {
       let FORMATTED_TEXT = Log.logFormatted(text: text, origin: origin)
       print(FORMATTED_TEXT)
       if fileUpdater != nil {

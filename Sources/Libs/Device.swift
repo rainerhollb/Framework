@@ -29,5 +29,44 @@ public struct Device {
 
    // not strict Device, more GUI elements
    public static let PICKER_DEFAULT_WHEEL_FONT: Font = .title3
+   
+   public static func osReleaseMajorNumber() -> Int {
+      let NUMBER_STRING = UIDevice.current.systemVersion.split(separator: ".")[0]
+      return Int(NUMBER_STRING)!
+   }
+
+   /**
+    Log to file without entering and leaving the log group semaphore.
+    PRE: fileUpdater is set => log group was entered
+    */
+   public static func logDeviceInfosInGroup(_ log: Log, _ loggingClass: String) {
+      log.logInGroup("device model identifier " + Device.MODEL_IDENTIFIER, loggingClass)
+      
+      log.logInGroup("device name " + Device.DEVICE_NAME, loggingClass)
+      
+      log.logInGroup("device model " + UIDevice.current.model, loggingClass)
+      log.logInGroup("device system " + UIDevice.current.systemName, loggingClass)
+      log.logInGroup("device system version " + UIDevice.current.systemVersion, loggingClass)
+      log.logInGroup(" -> major release number " + String(osReleaseMajorNumber()), loggingClass)
+      log.logInGroup("device model name " + Device.MODEL_NAME, loggingClass)
+      if Device.HAS_SMALL_SCREEN {
+         log.logInGroup("device is categorized as having a small screen like iPhone 8", loggingClass)
+      }
+      if Device.IS_SIMULATOR {
+         log.logInGroup("device is categorized as simulator", loggingClass)
+      }
+      if Device.DEVICE_CODE != nil
+      {
+         log.logInGroup("device code " + Device.DEVICE_CODE!, loggingClass)
+      } else {
+         log.logInGroup("device code not found", loggingClass)
+      }
+      if Device.IS_NEW_GENERATION {
+         log.logInGroup("device classified as new generation")
+      } else {
+         log.logInGroup("device classified as old generation")
+      }
+      log.logInGroup("device screen width \(UIScreen.main.bounds.width) * height \(UIScreen.main.bounds.height)")
+   }
 
 }
