@@ -86,7 +86,7 @@ public struct Time : Describable {
                .addingTimeInterval(ONE_SECOND)
                .addingTimeInterval(additional!),
             caller: caller)
-         let TEXT : String = caller + " Time.waitUntilNextFullSecond is waiting \(NANOS_TO_WAIT) ns = \(Double(NANOS_TO_WAIT) / Time.NANOS_PER_SECOND) s"
+         let TEXT : String = caller + " Time.waitUntilNextFullSecond is waiting \(Double(NANOS_TO_WAIT) / Time.NANOS_PER_SECOND) s"
          if log == nil {
             Log.timed(TEXT, typeName)
          } else {
