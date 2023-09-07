@@ -238,7 +238,7 @@ public struct Cellular : Describable {
          
          cellularUsageText = CELLULAR_CONSUMPTION_SINCE_STARTUP_STRING
          + " \(round(CELLULAR_TOTAL_CONSUMPTION_MB*10)/10) MB. It has reached allowed limit "
-         + MOBILE_LIMIT + ".\nStopped player."
+         + MOBILE_LIMIT + ".\nStopped playing."
 
       } else {
          // update view:
