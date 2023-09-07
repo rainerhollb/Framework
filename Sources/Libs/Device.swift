@@ -30,10 +30,8 @@ public struct Device {
    // not strict Device, more GUI elements
    public static let PICKER_DEFAULT_WHEEL_FONT: Font = .title3
    
-   public static func osReleaseMajorNumber() -> Int {
-      let NUMBER_STRING = UIDevice.current.systemVersion.split(separator: ".")[0]
-      return Int(NUMBER_STRING)!
-   }
+   public static let OS_RELEASE = UIDevice.current.systemVersion
+   public static let OS_RELEASE_MAJOR_NUMBER = osReleaseMajorNumber()
 
    /**
     Log to file without entering and leaving the log group semaphore.
@@ -67,6 +65,15 @@ public struct Device {
          log.logInGroup("device classified as old generation")
       }
       log.logInGroup("device screen width \(UIScreen.main.bounds.width) * height \(UIScreen.main.bounds.height)")
+   }
+
+   private static func osReleaseMajorNumber() -> Int {
+      if !OS_RELEASE.contains(".") {
+         Log.timed("OS release does not contain a dot: " + OS_RELEASE)
+      }
+      
+      let NUMBER_STRING = OS_RELEASE.split(separator: ".")[0]
+      return Int(NUMBER_STRING)!
    }
 
 }
