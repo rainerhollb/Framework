@@ -181,12 +181,12 @@ public class Log : Describable {
    
    // static, if no object is available or possible to create:
    
-   static func timed(_ text: String, _ origin: String = ""){
+   public static func timed(_ text: String, _ origin: String = ""){
       print(logFormatted(text: text, origin: origin))
       //DEFAULT_LOG.info(origin! + blank + ": " + text)
    }
    
-   static func timedError(_ errortext: String, _ origin: String = ""){
+   public static func timedError(_ errortext: String, _ origin: String = ""){
       print("************************** ERROR ************************************")
       Log.timed(errortext, origin)
       print("*********************************************************************")
