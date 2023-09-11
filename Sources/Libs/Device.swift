@@ -27,6 +27,7 @@ public struct Device {
 
    public static let IS_NEW_GENERATION = UIDevice.isNewGeneration()
    public static let MAY_BE_MAC: Bool = MODEL_NAME == "iPad Pro 12.9 inch 3rd Gen (1TB, WiFi)"
+   public static let HAS_NO_CELLULAR: Bool = MODEL_NAME.contains("WiFi")
 
    // not strict Device, more GUI elements
    public static let PICKER_DEFAULT_WHEEL_FONT: Font = .title3
