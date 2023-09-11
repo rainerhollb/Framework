@@ -26,6 +26,7 @@ public struct Device {
    public static let HAS_LARGE_SCREEN_WIDTH = UIScreen.main.bounds.width >= 700
 
    public static let IS_NEW_GENERATION = UIDevice.isNewGeneration()
+   public static let MAY_BE_MAC: Bool = MODEL_NAME == "iPad Pro 12.9 inch 3rd Gen (1TB, WiFi)"
 
    // not strict Device, more GUI elements
    public static let PICKER_DEFAULT_WHEEL_FONT: Font = .title3
